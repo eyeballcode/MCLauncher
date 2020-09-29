@@ -4,3 +4,4 @@ const fs = require('fs')
 
 mcUtils.ensureMCStructure()
 mcUtils.downloadFiles()
+mcUtils.addLauncherProfile()

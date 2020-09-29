@@ -77,5 +77,30 @@ module.exports = {
         }
       }
     })
+  },
+  addLauncherProfile: () => {
+    return new Promise((resolve, reject) => {
+      let mcBasePath = utils.getMCPath()
+      let profilePath = path.join(mcBasePath, '..', 'launcher_profiles.json')
+      fs.readFile(profilePath, (err, data) => {
+        if (err) return reject('Missing or invalid launcher profile')
+        let profileData = JSON.parse(data)
+
+        if (!profileData.profiles.JMSSModdedMC) {
+          profileData.profiles.JMSSModdedMC = {
+            created: new Date().toISOString(),
+            gameDir: mcBasePath,
+            icon: 'Grass',
+            javaArgs: '-Xmx3G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M',
+            lastVersionId: '1.12.2-forge1.12.2-14.23.5.2847',
+            name: 'JMSS Modded MC',
+            type: 'custom'
+          }
+          fs.writeFile(profilePath, JSON.stringify(profileData, null, 2), resolve)
+        } else {
+          resolve()
+        }
+      })
+    })
   }
 }
