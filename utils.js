@@ -66,16 +66,22 @@ module.exports = {
   },
   hashFile: path => {
     return new Promise(resolve => {
-      let fd = fs.createReadStream(path)
-      let hash = crypto.createHash('sha512')
-      hash.setEncoding('hex')
+      try {
+        let fd = fs.createReadStream(path)
+        let hash = crypto.createHash('sha512')
+        hash.setEncoding('hex')
 
-      fd.on('end', function() {
-        hash.end()
-        resolve(hash.read())
-      })
+        fd.on('end', () => {
+          hash.end()
+          resolve(hash.read())
+        })
 
-      fd.pipe(hash)
+        fd.on('error', () => {
+          resolve(null)
+        })
+
+        fd.pipe(hash)
+      } catch (e) { resolve(null) }
     })
   }
 }
