@@ -1,3 +1,4 @@
 /node_modules/
 /index-*
 .DS_Store
+/config.json

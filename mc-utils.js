@@ -6,8 +6,7 @@ const { exec } = require('child_process')
 const utils = require('./utils')
 const tempDir = require('temp-dir')
 
-let baseURL = 'http://localhost:8004'
-// let baseURL = 'http://moddedmc.transportsg.me'
+let baseURL = require('./config').url
 
 module.exports = {
   ensureMCStructure: () => {
