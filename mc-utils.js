@@ -65,8 +65,8 @@ module.exports = {
       }
     })
 
-    await async.forEach(filesRequired, newFile => {
-      return new Promise(resolve => {
+    await async.forEach(filesRequired, async newFile => {
+      await new Promise(resolve => {
         let existing = existingFileCache.find(file => file.path === newFile.path)
         let destinationPath = path.join(mcPath, newFile.type, newFile.path)
         fs.stat(destinationPath, async (err, stat) => {
@@ -82,8 +82,8 @@ module.exports = {
               let hash = await utils.hashFile(destinationPath)
               if (hash === newFile.hash) break
             }
-            resolve()
           }
+          resolve()
         })
       })
     })
@@ -105,8 +105,10 @@ module.exports = {
             name: 'JMSS Modded MC',
             type: 'custom'
           }
-        fs.writeFile(profilePath, JSON.stringify(profileData, null, 2), resolve)
-        resolve()
+
+        fs.writeFile(profilePath, JSON.stringify(profileData, null, 2), () => {
+          setTimeout(resolve, 1000)
+        })
       })
     })
   },
